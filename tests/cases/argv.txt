@@ -1,0 +1,29 @@
+# basics and defaults
+run -- python train.py
+submit --priority 90 --vram 12.5 -- bench --seed 1
+run --priority=60 --timeout=300 -- sh -c 'echo hi'
+# prefix abbreviation (argparse allow_abbrev) and an ambiguous prefix
+run --prio 5 -- x
+run --pre -- x
+run --p 5 -- x
+# repeatable, flags, short flag
+run --env A=1 --env B=2 --shared -q -- x
+run --env=A=1 --preemptible --quiet -- x
+# choices and types
+run --room cpu -- x
+run --room tpu -- x
+run --priority high -- x
+run --vram 1e1 -- x
+run --priority -3 -- x
+# remainder keeps flags after the command
+run -- python train.py --priority 99 --vram 0
+run python train.py --verbose
+# missing / unknown / extra
+run --priority
+cancel
+cancel j42 --force
+cancel j42 j43
+list -n 5 --all
+list --bogus
+bogus
+--version

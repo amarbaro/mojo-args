@@ -27,3 +27,61 @@ list -n 5 --all
 list --bogus
 bogus
 --version
+# explicit values, attached short values, bundles
+run --room=cpu -- x
+run --room= -- x
+run --quiet=1 -- x
+run -q=1 -- x
+run -qx -- y
+run --prio=7 -- x
+run --pre=1 -- x
+run --label=-x -- y
+run --label -x -- y
+run --label --shared -- y
+list -n5
+list -n
+list -n abc
+list -n -5
+list -n=7
+list --a
+list --all --all
+# numbers: underscores, inf, signs, spaces
+run --priority 1_0 -- x
+run --priority ' 7 ' -- x
+run --priority 1.5 -- x
+run --priority= -- x
+run --vram inf
+run --vram abc
+run --vram=-1.5e3
+run --timeout .5
+# the remainder keeps everything after the first positional
+run x -- y --priority 3
+run --priority 3
+run
+run --
+run -- --
+run --env A -- --env B
+# positional edge cases
+cancel -- j1
+cancel -- -j1
+cancel -j1
+cancel j1 -- j2
+cancel --force
+cancel --force --force j9
+# unknown options and top-level options
+run --unknown x
+run -n 5
+run --room gpu --unknown --also-unknown -- x
+-q run x
+bogus --x
+--ver
+# quotes in messages, empty strings, non-ASCII
+run --room "it's"
+run --room 'say "hi"'
+run --room "it's \"x\""
+run -qé -- x
+run --label é -- x
+run --env= -- x
+run --env '' -- x
+run ''
+cancel ''

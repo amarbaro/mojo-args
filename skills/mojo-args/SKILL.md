@@ -5,7 +5,7 @@ description: "Parse command-line arguments in Mojo with the mojo-args library, w
 
 # mojo-args
 
-argparse for Mojo 1.1. Its output and error messages are checked line by line against
+argparse for Mojo 1.2. Its output and error messages are checked line by line against
 CPython 3.14's `argparse`.
 
 ## Install

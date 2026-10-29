@@ -25,7 +25,7 @@ def main() raises:
 
 ## Install
 
-Requires Mojo 1.1. No other dependency.
+Requires Mojo 1.2. No other dependency.
 
 | Way | Command |
 |---|---|

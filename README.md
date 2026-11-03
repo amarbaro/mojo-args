@@ -1,6 +1,9 @@
 # mojo-args
 
-[![CI](https://github.com/amarbaro/mojo-args/actions/workflows/ci.yml/badge.svg)](https://github.com/amarbaro/mojo-args/actions/workflows/ci.yml)
+<!-- badges -->
+[![ci](https://github.com/amarbaro/mojo-args/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/amarbaro/mojo-args/actions/workflows/ci.yml) [![latest release](https://img.shields.io/github/v/release/amarbaro/mojo-args)](https://github.com/amarbaro/mojo-args/releases/latest) [![license](https://img.shields.io/github/license/amarbaro/mojo-args)](https://github.com/amarbaro/mojo-args/blob/main/LICENSE)
+<!-- /badges -->
+
 
 Command-line parsing for Mojo that behaves like Python's `argparse`: prefix abbreviation,
 `--opt=value`, `-n5`, bundled flags, `--` handling, sub-commands, a remainder command, and

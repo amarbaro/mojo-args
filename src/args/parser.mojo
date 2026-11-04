@@ -211,6 +211,9 @@ struct ArgumentParser(Movable):
         if add_help:
             self._add(Arg(["-h", "--help"], List[String](), "help", "", "show this help message and exit", HELP, T_STR, False, False))
 
+    def __deinit__(deinit self):
+        pass  # Mojo 1.3 cannot prove the recursive List[ArcPointer[ArgumentParser]] field destructible without one
+
     def _add(mut self, var a: Arg):
         for n in a.names:
             self.onames.append(n)

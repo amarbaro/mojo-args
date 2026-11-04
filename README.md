@@ -8,8 +8,6 @@
 Install: `pixi add mojo-args` once published. For now: `git clone https://github.com/amarbaro/mojo-args`, then `mojo run -I mojo-args/src app.mojo`.
 
 ```mojo
-# A gpu-wait style CLI: sub-commands, typed options, a remainder command.
-# parse_args() with no argument reads the process arguments; here a fixed argv shows the result.
 from args import ArgumentParser
 
 
@@ -18,57 +16,22 @@ def main() raises:
     p.add_subparsers("command")
     var run = p.add_parser("run")
     run[].add_argument("--priority", type="int", default="0")
-    run[].add_argument("--room", choices=["gpu", "cpu"], default="gpu")
-    run[].add_argument("--env", action="append")
     run[].add_argument("-q", "--quiet", action="store_true")
     run[].add_argument("cmd", nargs="...")
 
-    var ns = p.parse_args(["run", "--prio", "90", "--env", "A=1", "-q", "--", "python", "train.py"])
-    print(ns.get_str("command"), ns.get_int("priority"), ns.get_str("room"), ns.get_bool("quiet"))
-    print(ns.get_list("env")[0], " ".join(ns.get_list("cmd")))
-
-    try:
-        _ = p.parse_args(["run", "--room", "tpu"])
-    except e:
-        print(e)  # argument --room: invalid choice: 'tpu' (choose from 'gpu', 'cpu')
+    var ns = p.parse_args(["run", "--prio", "90", "-q", "--", "python", "train.py"])
+    print(ns.get_str("command"), ns.get_int("priority"), ns.get_bool("quiet"), " ".join(ns.get_list("cmd")))
 ```
-
-| | build the parser | 200,000 parses | peak RSS |
-|---|---|---|---|
-| mojo-args | 0.04 to 0.05 ms | 252 to 259 ms | 12.0 to 12.3 MB |
 <!-- /install -->
-
 
 Command-line parsing for Mojo that behaves like Python's `argparse`: prefix abbreviation,
 `--opt=value`, `-n5`, bundled flags, `--` handling, sub-commands, a remainder command, and
 argparse's exact usage-error text. It parses 13× faster than argparse.
 
-```mojo
-from args import ArgumentParser
-
-def main() raises:
-    var p = ArgumentParser("gpu-wait")
-    p.add_subparsers("command")
-    var run = p.add_parser("run")
-    run[].add_argument("--priority", type="int", default="0")
-    run[].add_argument("--room", choices=["gpu", "cpu"], default="gpu")
-    run[].add_argument("cmd", nargs="...")
-    var ns = p.parse_args()          # the process arguments; usage error -> stderr, exit 2
-    print(ns.get_str("command"), ns.get_int("priority"), ns.get_str("room"))
-```
-
 `gpu-wait run --prio 90 -- python train.py` gives `run 90 gpu`, and `cmd` is
 `["--", "python", "train.py"]`, as in argparse.
 
-## Install
-
 Requires Mojo 1.2. No other dependency.
-
-| Way | Command |
-|---|---|
-| Source path | `mojo run -I path/to/mojo-args/src app.mojo` |
-| Precompiled | `mojo precompile src/args -o args.mojoc`, then put it next to your code |
-| Vendor | copy `src/args/` into your project |
 
 ## What you get
 

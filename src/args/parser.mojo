@@ -186,6 +186,11 @@ def _clen(b: UInt8) -> Int:
     return 1 if b < 0x80 else (2 if b < 0xE0 else (3 if b < 0xF0 else 4))
 
 
+def _sl(s: String, lo: Int, hi: Int) -> String:
+    """Bytes lo..hi of s, hi clamped; argv may hold invalid UTF-8, so no codepoint-boundary assert."""
+    return String(unsafe_from_utf8=s.as_bytes()[lo : min(hi, s.byte_length())])
+
+
 struct ArgumentParser(Movable):
     var prog: String
     var args: List[Arg]
@@ -371,13 +376,14 @@ struct ArgumentParser(Movable):
                 om.append(_Match(head, tail, self.oact[i], True, True))
                 return 1
         var n0 = len(om)
+        var c1 = min(1 + _clen(b[1]), len(b))  # "-" and the first character
         for k in range(len(self.onames)):
             ref o = self.onames[k]
             if b[1] == 45:
                 if o.startswith(head):
                     om.append(_Match(o, tail, self.oact[k], eq >= 0, eq >= 0))
-            elif o == s[byte=:2]:
-                om.append(_Match(o, String(s[byte=2:]), self.oact[k], True, False))
+            elif o == _sl(s, 0, c1):
+                om.append(_Match(o, _sl(s, c1, len(b)), self.oact[k], True, False))
             elif o.startswith(head):
                 om.append(_Match(o, tail, self.oact[k], eq >= 0, eq >= 0))
         if len(om) > n0:
@@ -520,19 +526,19 @@ struct ArgumentParser(Movable):
                         raise self._err(a, "ignored explicit argument " + _repr(expl))
                     flags.append(a)
                     var cl = _clen(expl.as_bytes()[0])
-                    var nxt = self._find_opt("-" + String(expl[byte=:cl]))
+                    var nxt = self._find_opt("-" + _sl(expl, 0, cl))
                     if nxt < 0:
                         st.extras.append("-" + expl)
                         break
                     a = self.oact[nxt]
-                    opt = "-" + String(expl[byte=:cl])
-                    var rest = String(expl[byte=cl:])
+                    opt = "-" + _sl(expl, 0, cl)
+                    var rest = _sl(expl, cl, expl.byte_length())
                     expl = rest^
                     has = expl != ""
                     sep = False
                     if has and expl.as_bytes()[0] == 61:
                         sep = True
-                        var rest2 = String(expl[byte=1:])
+                        var rest2 = _sl(expl, 1, expl.byte_length())
                         expl = rest2^
                     continue
                 if not val:

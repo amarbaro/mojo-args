@@ -142,3 +142,12 @@ def main() raises:
 
     # no -h unless asked for: "-h" is then an ordinary unknown option
     assert_equal(msg(ArgumentParser("n", add_help=False), ["-h"]), "unrecognized arguments: -h")
+
+    # OS argv can hold any bytes: a lone lead byte, a truncated sequence, or a multi-byte character after a dash
+    # must give a usage error or extras, never abort (review C, args P0)
+    var qp = ArgumentParser("q")
+    qp.add_argument("-q", action="store_true")
+    var raw: List[List[UInt8]] = [[UInt8(45), 0xC3], [UInt8(45), 0xC3, 0xA9], [UInt8(45), 0x71, 0xFF], [UInt8(45), 0x71, 0xE2, 0x82], [UInt8(45), 0xFF]]
+    for r in raw:
+        _ = msg(qp, [String(unsafe_from_utf8=Span(r))])
+    assert_equal(msg(qp, ["-é"]), "unrecognized arguments: -é")

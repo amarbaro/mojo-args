@@ -85,3 +85,6 @@ run --env= -- x
 run --env '' -- x
 run ''
 cancel ''
+run -é
+run -q é -- x
+run -qé -- x

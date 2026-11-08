@@ -10,7 +10,7 @@ python3 -I tools/oracle.py tests/cases/argv.txt > .work/exp.txt
 timeout 30 "$CASES" tests/cases/argv.txt > .work/got.txt || { echo "FAIL run: runner exited non-zero"; exit 1; }
 diff .work/exp.txt .work/got.txt > .work/diff.txt || { echo "FAIL check: differs from argparse"; head -20 .work/diff.txt; exit 1; }
 echo "cases: $(grep -c '^>' .work/exp.txt), usage errors: $(grep -c 'exit 2' .work/exp.txt)"
-M=.venv/bin/mojo
+M=${MOJO:-.venv/bin/mojo}
 $M run -I src tests/api.mojo || { echo "FAIL api: tests/api.mojo"; exit 1; }
 $M run -I src examples/quickstart.mojo > /dev/null || { echo "FAIL example: examples/quickstart.mojo"; exit 1; }
 # the process entry point: real argv, stdout, stderr and exit status

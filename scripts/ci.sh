@@ -9,8 +9,8 @@ if [ -z "${MOJO:-}" ]; then
 fi
 export MOJO
 # the oracle is CPython 3.14's argparse: its usage-error text and "--" rules changed between releases
-uv python install 3.14 || { echo "FAIL setup: python 3.14"; exit 1; }
-export PATH="$(dirname "$(uv python find 3.14)"):$PATH"
+uv python install --managed-python 3.14.10 || { echo "FAIL setup: python 3.14.10"; exit 1; }
+export PATH="$(dirname "$(uv python find --managed-python 3.14.10)"):$PATH"
 python3 -c 'import sys; print("oracle argparse, python", sys.version.split()[0])'
 mkdir -p .work
 "$MOJO" build -I src tests/cases.mojo -o .work/cases || { echo "FAIL build: tests/cases.mojo"; exit 1; }

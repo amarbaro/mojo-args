@@ -1,0 +1,4 @@
+name = "mojo-args"
+version = "0.1.4"
+description = "Command-line parsing for Mojo with Python argparse behaviour: subcommands, typed flags, --help"
+tags = ["mojo", "cli", "argparse"]

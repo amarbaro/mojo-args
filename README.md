@@ -1,5 +1,7 @@
 # mojo-args
 
+> **Moved:** this library now lives in [amarbaro/mojo-libs](https://github.com/amarbaro/mojo-libs/tree/main/libs/args). This repository is read-only; issues and pull requests go there.
+
 <!-- badges -->
 [![ci](https://github.com/amarbaro/mojo-args/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/amarbaro/mojo-args/actions/workflows/ci.yml) [![latest release](https://img.shields.io/github/v/release/amarbaro/mojo-args)](https://github.com/amarbaro/mojo-args/releases/latest) [![license](https://img.shields.io/github/license/amarbaro/mojo-args)](https://github.com/amarbaro/mojo-args/blob/main/LICENSE)
 <!-- /badges -->
